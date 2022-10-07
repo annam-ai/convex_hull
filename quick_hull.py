@@ -1,46 +1,67 @@
 from helper import direction, calculate_distance
 
 def quick_hull(points):
-    hull = []
+    """
+    Calculate the convex hull using the Quick Hull Algorithm.
+    Find the left and right most point and connect them to separate the area in upper and lower. 
+    Then for each half iteratively find a point on the hull. 
+    :param points: list of Point objects
+    :return: list of Point objects on Convex Hull
+    """
+    convex_hull = []
+    
     left_most_point = min(points, key=lambda point: point.x)
     right_most_point = max(points, key=lambda point: point.x)
-    hull.append(left_most_point)
-    hull.append(right_most_point)
     
-    S1 = [] # left side
-    S2 = [] # right side
+    convex_hull.append(left_most_point)
+    convex_hull.append(right_most_point)
+    
+    left_side = []
+    right_side = []
 
-    for x in points:
-      if (direction(left_most_point, right_most_point, x) < 0):
-        S1.append(x)
-      if (direction(left_most_point, right_most_point, x) > 0):    
-        S2.append(x)
+    for current_point in points:
+      if (direction(left_most_point, right_most_point, current_point) < 0):
+        left_side.append(current_point)
+      if (direction(left_most_point, right_most_point, current_point) > 0):    
+        right_side.append(current_point)
                 
-    findHull(S1, left_most_point, right_most_point, hull)
-    findHull(S2, right_most_point, left_most_point, hull)
-    return hull
+    find_hull(left_side, left_most_point, right_most_point, convex_hull)
+    find_hull(right_side, right_most_point, left_most_point, convex_hull)
+    return convex_hull
   
-def findHull(Sk, P, Q, hull):
-    if(len(Sk) == 0): return hull
-    furthestPoint = Sk[0]
+def find_hull(points, left_most_point, right_most_point, convex_hull):
+    """
+    Find the furthest point from and connect it to the two previous found points.
+    Every point that is on the right side of the line (inside the triangle) is not on the hull.
+    Continue with the remaining points using the new hull point until no points are left.
+    :param points: list of Point objects
+    :param left_most_point: Point object
+    :param right_most_point: Point object
+    :param convex_hull: list of Point objects on the convex hull to update
+    :return: updated list of Point objects on Convex Hull
+    """
+    if(len(points) == 0): return convex_hull
+   
+    furthest_point = points[0]
     maxDist = 0
   
-    for x in Sk:      
-        dist = calculate_distance(P, Q, x)
+    for current_point in points:      
+        dist = calculate_distance(left_most_point, right_most_point, current_point)
         if(dist > maxDist): 
             maxDist = dist
-            furthestPoint = x
+            furthestPoint = current_point
 
-    Sk.remove(furthestPoint)
-    hull.append(furthestPoint)
+    points.remove(furthestPoint)
+    convex_hull.append(furthestPoint)
 
-    S1 = []
-    S2 = []
+    left_side = []
+    right_side = []
     
-    for x in Sk:
-      if direction(P, furthestPoint, x) < 0:
-        S1.append(x)
-      elif direction(furthestPoint, Q, x) < 0:
-        S2.append(x)
-    findHull(S1, P, furthestPoint, hull);
-    findHull(S2, furthestPoint, Q, hull);
+    for point in points:
+      if direction(left_most_point, furthestPoint, point) < 0:
+        left_side.append(point)
+      elif direction(furthestPoint, right_most_point, point) < 0:
+        right_side.append(point)
+        
+    find_hull(left_side, left_most_point, furthestPoint, convex_hull)
+    find_hull(right_side, furthestPoint, right_most_point, convex_hull)
