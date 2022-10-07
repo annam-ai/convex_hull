@@ -21,5 +21,5 @@ def generate_random_points(smallest_number=0, biggest_number=300, amount=50):
   return list_of_points
 
 
-def calculate_distance(p1, p2, p3):
-  return abs(direction(p1, p2, p3))
+def calculate_distance(point1, point2, point3):
+  return abs(direction(point1, point2, point3))
