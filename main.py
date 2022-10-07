@@ -10,13 +10,6 @@ list_of_points = [(0.4, 0.2), (1, 4), (3, 3), (3, 1), (7, 0), (5, 5), (9, 6),
 list_of_points = [Point(x, y) for x, y in list_of_points]
 
 start = timer()
-smallest_number=-5000
-amount = 1000000
-biggest_number = 5000
-list_of_points = generate_random_points(smallest_number, biggest_number, amount)
-end = timer()
-print(f"Generated {amount} random numbers between {smallest_number} and {biggest_number} in {round(end - start, 3)} seconds.")
-start = timer()
 convex_hull1 = quick_hull(list_of_points)
 end = timer()
 print(f"Calculated the convex hull with QuickHull in {round(end - start, 3)} seconds. {len(convex_hull1)} points are on the hull.")
