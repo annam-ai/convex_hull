@@ -1,10 +1,6 @@
 from Point import Point
 import random
 
-def distance_sq(point1, point2):
-  return (point1.x - point2.x)**2 + (point1.y - point2.y)**2
-
-
 def cross_product(point1, point2):
   return point1.x * point2.y - point2.x * point1.y
 
