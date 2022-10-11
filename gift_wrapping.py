@@ -1,4 +1,4 @@
-from helper import distance_sq, direction
+from helper import direction
 
 def gift_wrapping(points):
   """
@@ -29,4 +29,3 @@ def gift_wrapping(points):
       break
     result.append(points[next_in_list])
   return result
-
